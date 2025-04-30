@@ -1,0 +1,405 @@
+{
+  "name": "entities",
+  "children": [
+    {
+      "name": "night",
+      "value": 1520
+    },
+    {
+      "name": "late at night",
+      "value": 514
+    },
+    {
+      "name": "indian",
+      "value": 211
+    },
+    {
+      "name": "one night",
+      "value": 186
+    },
+    {
+      "name": "midnight",
+      "value": 184
+    },
+    {
+      "name": "the night",
+      "value": 168
+    },
+    {
+      "name": "indians",
+      "value": 106
+    },
+    {
+      "name": "nights",
+      "value": 103
+    },
+    {
+      "name": "hours",
+      "value": 85
+    },
+    {
+      "name": "the civil war",
+      "value": 80
+    },
+    {
+      "name": "every night",
+      "value": 65
+    },
+    {
+      "name": "confederate",
+      "value": 64
+    },
+    {
+      "name": "civil war",
+      "value": 63
+    },
+    {
+      "name": "half",
+      "value": 55
+    },
+    {
+      "name": "mary",
+      "value": 51
+    },
+    {
+      "name": "the morning",
+      "value": 51
+    },
+    {
+      "name": "inn",
+      "value": 44
+    },
+    {
+      "name": "the next morning",
+      "value": 37
+    },
+    {
+      "name": "native american",
+      "value": 37
+    },
+    {
+      "name": "george",
+      "value": 35
+    },
+    {
+      "name": "wwii",
+      "value": 33
+    },
+    {
+      "name": "more than one",
+      "value": 28
+    },
+    {
+      "name": "alice",
+      "value": 27
+    },
+    {
+      "name": "union",
+      "value": 27
+    },
+    {
+      "name": "morning",
+      "value": 25
+    },
+    {
+      "name": "that night",
+      "value": 24
+    },
+    {
+      "name": "13",
+      "value": 22
+    },
+    {
+      "name": "british",
+      "value": 22
+    },
+    {
+      "name": "spanish",
+      "value": 22
+    },
+    {
+      "name": "late night",
+      "value": 21
+    },
+    {
+      "name": "late one night",
+      "value": 20
+    },
+    {
+      "name": "elizabeth",
+      "value": 20
+    },
+    {
+      "name": "john",
+      "value": 20
+    },
+    {
+      "name": "early in the morning",
+      "value": 19
+    },
+    {
+      "name": "the middle of the night",
+      "value": 19
+    },
+    {
+      "name": "certain nights",
+      "value": 19
+    },
+    {
+      "name": "english",
+      "value": 18
+    },
+    {
+      "name": "sarah",
+      "value": 18
+    },
+    {
+      "name": "dusk",
+      "value": 18
+    },
+    {
+      "name": "hundreds",
+      "value": 17
+    },
+    {
+      "name": "a few seconds",
+      "value": 17
+    },
+    {
+      "name": "one evening",
+      "value": 17
+    },
+    {
+      "name": "catholic",
+      "value": 17
+    },
+    {
+      "name": "nasa",
+      "value": 16
+    },
+    {
+      "name": "some nights",
+      "value": 15
+    },
+    {
+      "name": "native americans",
+      "value": 15
+    },
+    {
+      "name": "a few minutes",
+      "value": 15
+    },
+    {
+      "name": "evening",
+      "value": 14
+    },
+    {
+      "name": "wal-mart",
+      "value": 14
+    },
+    {
+      "name": "at least two",
+      "value": 14
+    },
+    {
+      "name": "100",
+      "value": 14
+    },
+    {
+      "name": "kkk",
+      "value": 14
+    },
+    {
+      "name": "hannah",
+      "value": 14
+    },
+    {
+      "name": "the evening",
+      "value": 13
+    },
+    {
+      "name": "the early morning hours",
+      "value": 13
+    },
+    {
+      "name": "every morning",
+      "value": 13
+    },
+    {
+      "name": "12",
+      "value": 13
+    },
+    {
+      "name": "charlie",
+      "value": 13
+    },
+    {
+      "name": "university",
+      "value": 13
+    },
+    {
+      "name": "10",
+      "value": 13
+    },
+    {
+      "name": "the early morning",
+      "value": 13
+    },
+    {
+      "name": "nighttime",
+      "value": 12
+    },
+    {
+      "name": "dozens",
+      "value": 12
+    },
+    {
+      "name": "at least one",
+      "value": 12
+    },
+    {
+      "name": "all night",
+      "value": 12
+    },
+    {
+      "name": "german",
+      "value": 12
+    },
+    {
+      "name": "18",
+      "value": 12
+    },
+    {
+      "name": "chinese",
+      "value": 12
+    },
+    {
+      "name": "6th",
+      "value": 11
+    },
+    {
+      "name": "sam",
+      "value": 11
+    },
+    {
+      "name": "david",
+      "value": 11
+    },
+    {
+      "name": "one morning",
+      "value": 11
+    },
+    {
+      "name": "the revolutionary war",
+      "value": 11
+    },
+    {
+      "name": "irish",
+      "value": 11
+    },
+    {
+      "name": "jesus",
+      "value": 11
+    },
+    {
+      "name": "wilson",
+      "value": 11
+    },
+    {
+      "name": "about 2 miles",
+      "value": 11
+    },
+    {
+      "name": "ymca",
+      "value": 11
+    },
+    {
+      "name": "confederates",
+      "value": 11
+    },
+    {
+      "name": "annie",
+      "value": 11
+    },
+    {
+      "name": "hawaiian",
+      "value": 11
+    },
+    {
+      "name": "seconds",
+      "value": 10
+    },
+    {
+      "name": "about a mile",
+      "value": 10
+    },
+    {
+      "name": "church",
+      "value": 10
+    },
+    {
+      "name": "revolutionary war",
+      "value": 10
+    },
+    {
+      "name": "a few miles",
+      "value": 10
+    },
+    {
+      "name": "lincoln",
+      "value": 10
+    },
+    {
+      "name": "marie",
+      "value": 10
+    },
+    {
+      "name": "overnight",
+      "value": 9
+    },
+    {
+      "name": "french",
+      "value": 9
+    },
+    {
+      "name": "at least three",
+      "value": 9
+    },
+    {
+      "name": "unsolved mysteries",
+      "value": 9
+    },
+    {
+      "name": "scottish",
+      "value": 9
+    },
+    {
+      "name": "the underground railroad",
+      "value": 9
+    },
+    {
+      "name": "mexican",
+      "value": 9
+    },
+    {
+      "name": "navy",
+      "value": 9
+    },
+    {
+      "name": "mikey",
+      "value": 9
+    },
+    {
+      "name": "a few feet",
+      "value": 9
+    },
+    {
+      "name": "late nights",
+      "value": 9
+    },
+    {
+      "name": "sally",
+      "value": 9
+    }
+  ]
+}
