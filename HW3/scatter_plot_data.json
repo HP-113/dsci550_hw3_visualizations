@@ -1,0 +1,257 @@
+[
+  {
+    "state": "MI",
+    "precipitation": 36.94,
+    "haunting": 528
+  },
+  {
+    "state": "PA",
+    "precipitation": 49.09,
+    "haunting": 649
+  },
+  {
+    "state": "CA",
+    "precipitation": 16.34,
+    "haunting": 1067
+  },
+  {
+    "state": "MA",
+    "precipitation": 50.5,
+    "haunting": 341
+  },
+  {
+    "state": "AR",
+    "precipitation": 55.15,
+    "haunting": 119
+  },
+  {
+    "state": "OR",
+    "precipitation": 33.64,
+    "haunting": 155
+  },
+  {
+    "state": "AZ",
+    "precipitation": 11.19,
+    "haunting": 156
+  },
+  {
+    "state": "MD",
+    "precipitation": 45.51,
+    "haunting": 170
+  },
+  {
+    "state": "OK",
+    "precipitation": 33.47,
+    "haunting": 211
+  },
+  {
+    "state": "ME",
+    "precipitation": 50.95,
+    "haunting": 57
+  },
+  {
+    "state": "AK",
+    "precipitation": 48.96,
+    "haunting": 32
+  },
+  {
+    "state": "LA",
+    "precipitation": 61.88,
+    "haunting": 99
+  },
+  {
+    "state": "AL",
+    "precipitation": 60.76,
+    "haunting": 224
+  },
+  {
+    "state": "OH",
+    "precipitation": 44.26,
+    "haunting": 477
+  },
+  {
+    "state": "NJ",
+    "precipitation": 51.36,
+    "haunting": 194
+  },
+  {
+    "state": "DC",
+    "precipitation": 48.54,
+    "haunting": 16
+  },
+  {
+    "state": "ND",
+    "precipitation": 21.09,
+    "haunting": 58
+  },
+  {
+    "state": "WY",
+    "precipitation": 16.91,
+    "haunting": 76
+  },
+  {
+    "state": "NC",
+    "precipitation": 47.43,
+    "haunting": 211
+  },
+  {
+    "state": "KY",
+    "precipitation": 55.81,
+    "haunting": 369
+  },
+  {
+    "state": "KS",
+    "precipitation": 30.02,
+    "haunting": 122
+  },
+  {
+    "state": "NY",
+    "precipitation": 45.33,
+    "haunting": 459
+  },
+  {
+    "state": "WI",
+    "precipitation": 38.44,
+    "haunting": 274
+  },
+  {
+    "state": "IA",
+    "precipitation": 37.81,
+    "haunting": 169
+  },
+  {
+    "state": "WV",
+    "precipitation": 48.72,
+    "haunting": 106
+  },
+  {
+    "state": "NM",
+    "precipitation": 13.19,
+    "haunting": 78
+  },
+  {
+    "state": "WA",
+    "precipitation": 34.1,
+    "haunting": 218
+  },
+  {
+    "state": "IL",
+    "precipitation": 43.28,
+    "haunting": 395
+  },
+  {
+    "state": "IN",
+    "precipitation": 45.44,
+    "haunting": 350
+  },
+  {
+    "state": "VA",
+    "precipitation": 48.41,
+    "haunting": 192
+  },
+  {
+    "state": "ID",
+    "precipitation": 15.82,
+    "haunting": 66
+  },
+  {
+    "state": "NH",
+    "precipitation": 48.69,
+    "haunting": 72
+  },
+  {
+    "state": "VT",
+    "precipitation": 47.86,
+    "haunting": 63
+  },
+  {
+    "state": "NV",
+    "precipitation": 10.0,
+    "haunting": 56
+  },
+  {
+    "state": "HI",
+    "precipitation": 35.27,
+    "haunting": 96
+  },
+  {
+    "state": "UT",
+    "precipitation": 15.57,
+    "haunting": 134
+  },
+  {
+    "state": "NE",
+    "precipitation": 30.03,
+    "haunting": 111
+  },
+  {
+    "state": "GA",
+    "precipitation": 50.63,
+    "haunting": 289
+  },
+  {
+    "state": "TX",
+    "precipitation": 29.29,
+    "haunting": 695
+  },
+  {
+    "state": "MT",
+    "precipitation": 15.54,
+    "haunting": 42
+  },
+  {
+    "state": "TN",
+    "precipitation": 57.89,
+    "haunting": 221
+  },
+  {
+    "state": "FL",
+    "precipitation": 55.79,
+    "haunting": 328
+  },
+  {
+    "state": "MO",
+    "precipitation": 46.39,
+    "haunting": 314
+  },
+  {
+    "state": "DE",
+    "precipitation": 49.96,
+    "haunting": 37
+  },
+  {
+    "state": "SD",
+    "precipitation": 25.98,
+    "haunting": 75
+  },
+  {
+    "state": "MS",
+    "precipitation": 63.05,
+    "haunting": 63
+  },
+  {
+    "state": "CT",
+    "precipitation": 50.41,
+    "haunting": 184
+  },
+  {
+    "state": "MN",
+    "precipitation": 32.27,
+    "haunting": 162
+  },
+  {
+    "state": "SC",
+    "precipitation": 51.15,
+    "haunting": 167
+  },
+  {
+    "state": "RI",
+    "precipitation": 49.59,
+    "haunting": 68
+  },
+  {
+    "state": "CO",
+    "precipitation": 15.09,
+    "haunting": 166
+  }
+]

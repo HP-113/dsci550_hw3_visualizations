@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Haunted Events Timeline</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            pointer-events: none;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Haunted Events by Year</h2>
+    <p>This timeline shows how many haunted events are mentioned per year.</p>
+
+    <svg width="960" height="500"></svg>
+    <div class="tooltip" style="opacity: 0;"></div>
+
+    <script>
+        const svg = d3.select("svg");
+        const tooltip = d3.select(".tooltip");
+
+        const margin = { top: 30, right: 30, bottom: 50, left: 60 };
+        const width = +svg.attr("width") - margin.left - margin.right;
+        const height = +svg.attr("height") - margin.top - margin.bottom;
+
+        const chart = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        d3.json("timeline_data.json").then(data => {
+            data.forEach(d => {
+                d.year = +d.year;
+                d.count = +d.count;
+            });
+
+            const x = d3.scaleLinear()
+                .domain(d3.extent(data, d => d.year))
+                .range([0, width]);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.count)]).nice()
+                .range([height, 0]);
+
+            
+            chart.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+            
+            chart.append("g")
+                .call(d3.axisLeft(y));
+
+            
+            chart.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 2)
+                .attr("d", d3.line()
+                    .x(d => x(d.year))
+                    .y(d => y(d.count))
+                );
+
+            
+            chart.selectAll("circle")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", d => x(d.year))
+                .attr("cy", d => y(d.count))
+                .attr("r", 4)
+                .attr("fill", "red")
+                .on("mouseover", (event, d) => {
+                    tooltip
+                        .style("opacity", 1)
+                        .html(`Year: <strong>${d.year}</strong><br>Mentions: <strong>${d.count}</strong>`)
+                        .style("left", `${event.pageX + 10}px`)
+                        .style("top", `${event.pageY - 28}px`);
+                })
+                .on("mouseout", () => {
+                    tooltip.style("opacity", 0);
+                });
+        });
+    </script>
+</body>
+
+</html>

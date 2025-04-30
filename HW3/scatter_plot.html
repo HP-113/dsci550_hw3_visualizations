@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Scatter Plot: Precipitation vs Haunting</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        svg {
+            width: 900px;
+            height: 600px;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Scatter Plot: Annual Precipitation vs Number of Hauntings</h2>
+    <svg></svg>
+    <div class="tooltip" style="opacity: 0;"></div>
+
+    <script>
+        const margin = { top: 40, right: 40, bottom: 50, left: 60 },
+            width = 900 - margin.left - margin.right,
+            height = 600 - margin.top - margin.bottom;
+
+        const svg = d3.select("svg")
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const tooltip = d3.select(".tooltip");
+
+        d3.json("scatter_plot_data.json").then(data => {
+            data.forEach(d => {
+                d.precipitation = +d.precipitation;
+                d.haunting = +d.haunting;
+            });
+
+            const x = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.precipitation) * 1.05])
+                .range([0, width]);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.haunting) * 1.05])
+                .range([height, 0]);
+
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x));
+
+            svg.append("g")
+                .call(d3.axisLeft(y));
+
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", height + 40)
+                .attr("text-anchor", "middle")
+                .text("Average Annual Precipitation (inches)");
+
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -height / 2)
+                .attr("y", -45)
+                .attr("text-anchor", "middle")
+                .text("Haunted Places Count");
+
+            svg.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x(d.precipitation))
+                .attr("cy", d => y(d.haunting))
+                .attr("r", 5)
+                .attr("fill", "#d62728")
+                .on("mouseover", (event, d) => {
+                    tooltip.style("opacity", 1)
+                        .html(`<strong>${d.state}</strong><br>Precip: ${d.precipitation}<br>Haunted: ${d.haunting}`)
+                        .style("left", `${event.pageX + 10}px`)
+                        .style("top", `${event.pageY - 28}px`);
+                })
+                .on("mouseout", () => tooltip.style("opacity", 0));
+
+            
+            const n = data.length;
+            const sumX = d3.sum(data, d => d.precipitation);
+            const sumY = d3.sum(data, d => d.haunting);
+            const sumXY = d3.sum(data, d => d.precipitation * d.haunting);
+            const sumX2 = d3.sum(data, d => d.precipitation ** 2);
+
+            const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX ** 2);
+            const b = (sumY - a * sumX) / n;
+
+            const xMin = d3.min(data, d => d.precipitation);
+            const xMax = d3.max(data, d => d.precipitation);
+            const yMin = a * xMin + b;
+            const yMax = a * xMax + b;
+
+            svg.append("line")
+                .attr("x1", x(xMin))
+                .attr("y1", y(yMin))
+                .attr("x2", x(xMax))
+                .attr("y2", y(yMax))
+                .attr("stroke", "#1f77b4")
+                .attr("stroke-width", 2)
+                .attr("stroke-dasharray", "4 2");
+        });
+    </script>
+</body>
+
+</html>
