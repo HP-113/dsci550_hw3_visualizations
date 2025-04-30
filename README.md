@@ -1,3 +1,4 @@
+For run at local environment
 1. cd to code file
 2. run “python -m http.server 8000” at terminal
 3. Treemap http://localhost:8000/treemap_entities.html
