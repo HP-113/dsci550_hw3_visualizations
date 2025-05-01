@@ -1,172 +1,249 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>Sequence Sunburst - Center Percentage</title>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<style>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Sequence Sunburst - Time → Event → Apparition</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
     body {
-        font-family: sans-serif;
-        margin: 20px;
-        background: #fff;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-image: url('faceless.png');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: white;
+    }
+
+    header {
+      background-color: #8b0000;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .buttons {
+      text-align: center;
+      margin: 30px;
+    }
+
+    .buttons a {
+      background-color: white;
+      color: black;
+      padding: 10px 20px;
+      margin: 10px;
+      text-decoration: none;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .buttons a:hover {
+      background-color: #ddd;
+    }
+
+    .description-block {
+      background-color: #3b2b27;
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 1000px;
+      border-radius: 10px;
+    }
+
+    .description-block h3 {
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    .description-block p {
+      font-size: 14px;
+      color: #dddddd;
+      line-height: 1.6;
     }
 
     #breadcrumb {
-        font-size: 14px;
-        margin-bottom: 10px;
-        font-weight: bold;
-        color: #333;
+      font-size: 14px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #ccc;
+      text-align: center;
     }
 
     svg {
-        width: 800px;
-        height: 800px;
+      display: block;
+      margin: 0 auto;
+      width: 800px;
+      height: 800px;
     }
 
     .center-label {
-        text-anchor: middle;
-        dominant-baseline: middle;
-        fill: #333;
-        font-size: 20px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      fill: #fff;
+      font-size: 20px;
     }
 
     .sub-label {
-        font-size: 14px;
-        fill: #777;
+      font-size: 14px;
+      fill: #aaa;
     }
 
     .trail {
-        font-size: 13px;
-        fill: #333;
+      font-size: 13px;
+      fill: #fff;
     }
 
     .trail polygon {
-        fill: #bbb;
-        stroke: #fff;
-        stroke-width: 1;
+      fill: #bbb;
+      stroke: #fff;
+      stroke-width: 1;
     }
 
     .trail text {
-        dominant-baseline: middle;
+      dominant-baseline: middle;
     }
-</style>
+  </style>
+</head>
 
 <body>
-    <h2>Sequence Sunburst: Time → Event → Apparition</h2>
-    <div id="breadcrumb">Hover over a segment</div>
-    <svg></svg>
+  <header>Haunted Places Data Exploration – Spring 2025</header>
 
-    <script>
-        const width = 800;
-        const radius = width / 2;
+  <div class="banner">
+    <h1>Explore Visualizations</h1>
+  </div>
 
-        const svg = d3.select("svg")
-            .attr("viewBox", [0, 0, width, width]);
+  <div class="buttons">
+    <a href="sequence_sunburst.html">Sequence Sunburst</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="scatter_plot.html">Scatter Plot</a>
+    <a href="treemap_entities.html">Treemap</a>
+    <a href="haunted_map.html">Map Visualization</a>
+    <a href="index.html">Home</a>
+  </div>
 
-        const g = svg.append("g")
-            .attr("transform", `translate(${radius},${radius})`);
+  <div class="description-block">
+    <h3>Description</h3>
+    <p>This sunburst chart visualizes the distribution of haunted place reports by time of day, event type, and apparition type.</p>
+    <h3>Insight</h3>
+    <p>The nested structure helps identify common sequences such as nighttime sightings of specific ghost types tied to certain events, allowing pattern discovery across dimensions.</p>
+  </div>
 
-        const arc = d3.arc()
-            .startAngle(d => d.x0)
-            .endAngle(d => d.x1)
-            .innerRadius(d => d.y0)
-            .outerRadius(d => d.y1);
+  <div id="breadcrumb">Hover over a segment</div>
+  <svg></svg>
 
-        const format = d3.format(".2%");
+  <script>
+    const width = 800;
+    const radius = width / 2;
 
-        function buildHierarchy(csv) {
-            const root = { name: "root", children: [] };
-            for (const row of csv) {
-                const parts = row.sequence.split("-");
-                let current = root;
-                for (const part of parts) {
-                    let child = (current.children || []).find(c => c.name === part);
-                    if (!child) {
-                        child = { name: part };
-                        (current.children = current.children || []).push(child);
-                    }
-                    current = child;
-                }
-                current.value = +row.size;
-            }
-            return root;
+    const svg = d3.select("svg")
+      .attr("viewBox", [0, 0, width, width]);
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${radius},${radius})`);
+
+    const arc = d3.arc()
+      .startAngle(d => d.x0)
+      .endAngle(d => d.x1)
+      .innerRadius(d => d.y0)
+      .outerRadius(d => d.y1);
+
+    function buildHierarchy(csv) {
+      const root = { name: "root", children: [] };
+      for (const row of csv) {
+        const parts = row.sequence.split("-");
+        let current = root;
+        for (const part of parts) {
+          let child = (current.children || []).find(c => c.name === part);
+          if (!child) {
+            child = { name: part };
+            (current.children = current.children || []).push(child);
+          }
+          current = child;
         }
+        current.value = +row.size;
+      }
+      return root;
+    }
 
-        function breadcrumb(sequenceArray) {
-            const b = { w: 100, h: 30, s: 3 };
-            const trail = svg.selectAll(".trail").data([null]).join("g").attr("class", "trail");
-
-            const groups = trail.selectAll("g")
-                .data(sequenceArray)
-                .join(
-                    enter => {
-                        const g = enter.append("g");
-                        g.append("polygon");
-                        g.append("text");
-                        return g;
-                    }
-                );
-
-            groups.attr("transform", (d, i) => `translate(${i * (b.w + b.s)}, 0)`);
-
-            groups.select("polygon")
-                .attr("points", () => "0,0 100,0 100,30 0,30")
-                .attr("fill", "#bbb");
-
-            groups.select("text")
-                .attr("x", b.w / 2)
-                .attr("y", b.h / 2)
-                .attr("dy", "0.35em")
-                .attr("text-anchor", "middle")
-                .text(d => d);
-
-            trail.attr("transform", "translate(0,0)");
-        }
-
-        d3.json("sequence_sunburst_data.json").then(csv => {
-            const root = d3.partition()
-                .size([2 * Math.PI, radius])
-                (d3.hierarchy(buildHierarchy(csv)).sum(d => d.value || 0));
-
-            const total = root.value;
-
-            const nodes = root.descendants().filter(d => d.depth);
-
-            const path = g.selectAll("path")
-                .data(nodes)
-                .join("path")
-                .attr("d", arc)
-                .attr("fill", d => d3.interpolateRainbow(d.x0 / (2 * Math.PI)))
-                .style("opacity", 1)
-                .on("mouseover", function (event, d) {
-                    const sequence = d.ancestors().reverse().slice(1).map(d => d.data.name);
-                    const percent = (d.value / total * 100).toFixed(2) + "%";
-                    const count = d.value;
-
-                    breadcrumb(sequence);
-                    g.selectAll("path").style("opacity", 0.3);
-                    g.selectAll("path")
-                        .filter(node => sequence.includes(node.data.name))
-                        .style("opacity", 1);
-
-                    label.text(percent);
-                    sublabel.text(`${count} mentions`);
-                })
-                .on("mouseout", () => {
-                    g.selectAll("path").style("opacity", 1);
-                    d3.selectAll(".trail").remove();
-                    label.text("Hover a segment");
-                    sublabel.text("");
-                });
-
-            // Center Labels
-            const label = g.append("text")
-                .attr("class", "center-label")
-                .attr("y", -10)
-                .text("Hover a segment");
-
-            const sublabel = g.append("text")
-                .attr("class", "center-label sub-label")
-                .attr("y", 15)
-                .text("");
+    function breadcrumb(sequenceArray) {
+      const b = { w: 100, h: 30, s: 3 };
+      const trail = svg.selectAll(".trail").data([null]).join("g").attr("class", "trail");
+      const groups = trail.selectAll("g")
+        .data(sequenceArray)
+        .join(enter => {
+          const g = enter.append("g");
+          g.append("polygon");
+          g.append("text");
+          return g;
         });
-    </script>
+
+      groups.attr("transform", (d, i) => `translate(${i * (b.w + b.s)}, 0)`);
+
+      groups.select("polygon")
+        .attr("points", () => "0,0 100,0 100,30 0,30")
+        .attr("fill", "#bbb");
+
+      groups.select("text")
+        .attr("x", b.w / 2)
+        .attr("y", b.h / 2)
+        .attr("dy", "0.35em")
+        .attr("text-anchor", "middle")
+        .text(d => d);
+
+      trail.attr("transform", "translate(0,0)");
+    }
+
+    d3.json("sequence_sunburst_data.json").then(csv => {
+      const root = d3.partition()
+        .size([2 * Math.PI, radius])
+        (d3.hierarchy(buildHierarchy(csv)).sum(d => d.value || 0));
+
+      const total = root.value;
+      const nodes = root.descendants().filter(d => d.depth);
+
+      const path = g.selectAll("path")
+        .data(nodes)
+        .join("path")
+        .attr("d", arc)
+        .attr("fill", d => d3.interpolateRainbow(d.x0 / (2 * Math.PI)))
+        .style("opacity", 1)
+        .on("mouseover", function (event, d) {
+          const sequence = d.ancestors().reverse().slice(1).map(d => d.data.name);
+          const percent = (d.value / total * 100).toFixed(2) + "%";
+          const count = d.value;
+          breadcrumb(sequence);
+          g.selectAll("path").style("opacity", 0.3);
+          g.selectAll("path")
+            .filter(node => sequence.includes(node.data.name))
+            .style("opacity", 1);
+          label.text(percent);
+          sublabel.text(`${count} mentions`);
+        })
+        .on("mouseout", () => {
+          g.selectAll("path").style("opacity", 1);
+          d3.selectAll(".trail").remove();
+          label.text("Hover a segment");
+          sublabel.text("");
+        });
+
+      const label = g.append("text")
+        .attr("class", "center-label")
+        .attr("y", -10)
+        .text("Hover a segment");
+
+      const sublabel = g.append("text")
+        .attr("class", "center-label sub-label")
+        .attr("y", 15)
+        .text("");
+    });
+  </script>
 </body>
+</html>
