@@ -171,6 +171,10 @@
     ]).then(([us, cities]) => {
       const states = topojson.feature(us, us.objects.states).features;
 
+      const colorScale = d3.scaleSequential()
+        .domain(d3.extent(cities, d => d.count))
+        .interpolator(d3.interpolateRdYlGn);
+
       g.append("g")
         .selectAll("path")
         .data(states)
@@ -203,18 +207,63 @@
           return coords ? coords[1] : -100;
         })
         .attr("r", d => Math.sqrt(d.count) * 2)
-        .attr("fill", "steelblue")
-        .attr("opacity", 0.7)
+        .attr("fill", d => colorScale(d.count))
+        .attr("opacity", 0.8)
         .on("mouseover", (event, d) => {
           tooltip
             .style("opacity", 1)
-            .html(`<strong>${d.city}</strong>`)
+            .html(`<strong>${d.city}</strong><br/>Sightings: ${d.count}`)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 28) + "px");
         })
         .on("mouseout", () => {
           tooltip.style("opacity", 0);
         });
+
+      const legendHeight = 200;
+      const legendWidth = 15;
+
+      const legendSvg = svg.append("g")
+        .attr("transform", `translate(${width - 80}, 20)`);
+
+      const legendScale = d3.scaleLinear()
+        .domain(colorScale.domain())
+        .range([legendHeight, 0]);
+
+      const legendAxis = d3.axisRight(legendScale)
+        .ticks(6)
+        .tickFormat(d3.format(".0f"));
+
+      const defs = svg.append("defs");
+      const linearGradient = defs.append("linearGradient")
+        .attr("id", "legend-gradient")
+        .attr("x1", "0%")
+        .attr("y1", "100%")
+        .attr("x2", "0%")
+        .attr("y2", "0%");
+
+      d3.range(0, 1.01, 0.01).forEach(t => {
+        linearGradient.append("stop")
+          .attr("offset", `${t * 100}%`)
+          .attr("stop-color", colorScale(colorScale.domain()[0] + t * (colorScale.domain()[1] - colorScale.domain()[0])));
+      });
+
+      legendSvg.append("rect")
+        .attr("width", legendWidth)
+        .attr("height", legendHeight)
+        .style("fill", "url(#legend-gradient)");
+
+      legendSvg.append("g")
+        .attr("transform", `translate(${legendWidth}, 0)`)
+        .call(legendAxis);
+
+      legendSvg.append("text")
+        .attr("x", -20)
+        .attr("y", -10)
+        .attr("text-anchor", "start")
+        .attr("fill", "white")
+        .style("font-size", "12px")
+        .text("Sightings Count");
     });
   </script>
 </body>
