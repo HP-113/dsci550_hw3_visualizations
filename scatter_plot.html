@@ -2,122 +2,217 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Scatter Plot: Precipitation vs Haunting</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 20px;
-        }
+  <meta charset="UTF-8" />
+  <title>Scatter Plot: Precipitation vs Haunting</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-image: url('faceless.png');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: white;
+    }
 
-        svg {
-            width: 900px;
-            height: 600px;
-        }
+    header {
+      background-color: #8b0000;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-        .tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.75);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            pointer-events: none;
-        }
-    </style>
+    .banner {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .description-block {
+      background-color: #3b2b27;
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 1000px;
+      border-radius: 10px;
+    }
+
+    .description-block h3 {
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    .description-block p {
+      font-size: 14px;
+      color: #dddddd;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      text-align: center;
+      margin: 30px;
+    }
+
+    .buttons a {
+      background-color: white;
+      color: black;
+      padding: 10px 20px;
+      margin: 10px;
+      text-decoration: none;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .buttons a:hover {
+      background-color: #ddd;
+    }
+
+    .chart-container {
+      background-color: #111;
+      color: white;
+      max-width: 1000px;
+      margin: 0 auto 40px auto;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    svg {
+      width: 100%;
+      height: 600px;
+      display: block;
+      margin: 0 auto;
+      background-color: transparent;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body>
+  <header>Haunted Places Data Exploration – Spring 2025</header>
+
+  <div class="banner">
+    <h1>Explore Visualizations</h1>
+  </div>
+
+  <div class="buttons">
+    <a href="sequence_sunburst.html">Sequence Sunburst</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="scatter_plot.html">Scatter Plot</a>
+    <a href="treemap_entities.html">Treemap</a>
+    <a href="index.html">Home</a>
+  </div>
+
+  <div class="description-block">
+    <h3>Description</h3>
+    <p>This scatter plot examines the relationship between average annual precipitation and the number of haunted places reported per U.S. state.</p>
+
+    <h3>Insight</h3>
+    <p>The trend line provides a linear approximation. It may help explore whether wetter states report more hauntings or if no clear correlation exists between rainfall and paranormal activity.</p>
+  </div>
+
+  <div class="chart-container">
     <h2>Scatter Plot: Annual Precipitation vs Number of Hauntings</h2>
     <svg></svg>
     <div class="tooltip" style="opacity: 0;"></div>
+  </div>
 
-    <script>
-        const margin = { top: 40, right: 40, bottom: 50, left: 60 },
-            width = 900 - margin.left - margin.right,
-            height = 600 - margin.top - margin.bottom;
+  <script>
+    const margin = { top: 40, right: 40, bottom: 50, left: 60 },
+      width = 900 - margin.left - margin.right,
+      height = 600 - margin.top - margin.bottom;
 
-        const svg = d3.select("svg")
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+    const svg = d3.select("svg")
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const tooltip = d3.select(".tooltip");
+    const tooltip = d3.select(".tooltip");
 
-        d3.json("scatter_plot_data.json").then(data => {
-            data.forEach(d => {
-                d.precipitation = +d.precipitation;
-                d.haunting = +d.haunting;
-            });
+    d3.json("scatter_plot_data.json").then(data => {
+      data.forEach(d => {
+        d.precipitation = +d.precipitation;
+        d.haunting = +d.haunting;
+      });
 
-            const x = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d.precipitation) * 1.05])
-                .range([0, width]);
+      const x = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.precipitation) * 1.05])
+        .range([0, width]);
 
-            const y = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d.haunting) * 1.05])
-                .range([height, 0]);
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.haunting) * 1.05])
+        .range([height, 0]);
 
-            svg.append("g")
-                .attr("transform", `translate(0,${height})`)
-                .call(d3.axisBottom(x));
+      svg.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x).tickSize(-height).tickPadding(10));
 
-            svg.append("g")
-                .call(d3.axisLeft(y));
+      svg.append("g")
+        .call(d3.axisLeft(y).tickSize(-width).tickPadding(10));
 
-            svg.append("text")
-                .attr("x", width / 2)
-                .attr("y", height + 40)
-                .attr("text-anchor", "middle")
-                .text("Average Annual Precipitation (inches)");
+      svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + 40)
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .text("Average Annual Precipitation (inches)");
 
-            svg.append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("x", -height / 2)
-                .attr("y", -45)
-                .attr("text-anchor", "middle")
-                .text("Haunted Places Count");
+      svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -45)
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .text("Haunted Places Count");
 
-            svg.selectAll("circle")
-                .data(data)
-                .join("circle")
-                .attr("cx", d => x(d.precipitation))
-                .attr("cy", d => y(d.haunting))
-                .attr("r", 5)
-                .attr("fill", "#d62728")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("opacity", 1)
-                        .html(`<strong>${d.state}</strong><br>Precip: ${d.precipitation}<br>Haunted: ${d.haunting}`)
-                        .style("left", `${event.pageX + 10}px`)
-                        .style("top", `${event.pageY - 28}px`);
-                })
-                .on("mouseout", () => tooltip.style("opacity", 0));
+      svg.selectAll("circle")
+        .data(data)
+        .join("circle")
+        .attr("cx", d => x(d.precipitation))
+        .attr("cy", d => y(d.haunting))
+        .attr("r", 5)
+        .attr("fill", "#d62728")
+        .on("mouseover", (event, d) => {
+          tooltip.style("opacity", 1)
+            .html(`<strong>${d.state}</strong><br>Precip: ${d.precipitation}<br>Haunted: ${d.haunting}`)
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mouseout", () => tooltip.style("opacity", 0));
 
-            
-            const n = data.length;
-            const sumX = d3.sum(data, d => d.precipitation);
-            const sumY = d3.sum(data, d => d.haunting);
-            const sumXY = d3.sum(data, d => d.precipitation * d.haunting);
-            const sumX2 = d3.sum(data, d => d.precipitation ** 2);
+      const n = data.length;
+      const sumX = d3.sum(data, d => d.precipitation);
+      const sumY = d3.sum(data, d => d.haunting);
+      const sumXY = d3.sum(data, d => d.precipitation * d.haunting);
+      const sumX2 = d3.sum(data, d => d.precipitation ** 2);
 
-            const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX ** 2);
-            const b = (sumY - a * sumX) / n;
+      const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX ** 2);
+      const b = (sumY - a * sumX) / n;
 
-            const xMin = d3.min(data, d => d.precipitation);
-            const xMax = d3.max(data, d => d.precipitation);
-            const yMin = a * xMin + b;
-            const yMax = a * xMax + b;
+      const xMin = d3.min(data, d => d.precipitation);
+      const xMax = d3.max(data, d => d.precipitation);
+      const yMin = a * xMin + b;
+      const yMax = a * xMax + b;
 
-            svg.append("line")
-                .attr("x1", x(xMin))
-                .attr("y1", y(yMin))
-                .attr("x2", x(xMax))
-                .attr("y2", y(yMax))
-                .attr("stroke", "#1f77b4")
-                .attr("stroke-width", 2)
-                .attr("stroke-dasharray", "4 2");
-        });
-    </script>
+      svg.append("line")
+        .attr("x1", x(xMin))
+        .attr("y1", y(yMin))
+        .attr("x2", x(xMax))
+        .attr("y2", y(yMax))
+        .attr("stroke", "#1f77b4")
+        .attr("stroke-width", 2)
+        .attr("stroke-dasharray", "4 2");
+    });
+  </script>
 </body>
 
 </html>
