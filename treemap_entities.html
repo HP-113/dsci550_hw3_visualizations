@@ -7,12 +7,76 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      margin: 20px;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-image: url('faceless.png');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: white;
     }
 
-    h2 {
-      margin-bottom: 10px;
+    header {
+      background-color: #8b0000;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .buttons {
+      text-align: center;
+      margin: 30px;
+    }
+
+    .buttons a {
+      background-color: white;
+      color: black;
+      padding: 10px 20px;
+      margin: 10px;
+      text-decoration: none;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .buttons a:hover {
+      background-color: #ddd;
+    }
+
+    .description-block {
+      background-color: #3b2b27;
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 1000px;
+      border-radius: 10px;
+    }
+
+    .description-block h3 {
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    .description-block p {
+      font-size: 14px;
+      color: #dddddd;
+      line-height: 1.6;
+    }
+
+    .chart-container {
+      background-color: #111;
+      color: white;
+      max-width: 1000px;
+      margin: 0 auto 40px auto;
+      padding: 20px;
+      border-radius: 10px;
+      position: relative;
     }
 
     .node {
@@ -25,27 +89,42 @@
       color: white;
       text-shadow: 1px 1px 2px #000;
     }
-
-    #treemap {
-      position: relative;
-      width: 960px;
-      height: 600px;
-    }
   </style>
 </head>
 
 <body>
-  <h2>Top Haunted Entities Treemap</h2>
-  <p>This treemap visualizes the most frequently mentioned entities in haunted place data (e.g., names, places, time
-    expressions).</p>
+  <header>Haunted Places Data Exploration – Spring 2025</header>
 
-  <div id="treemap"></div>
+  <div class="banner">
+    <h1>Explore Visualizations</h1>
+  </div>
+
+  <div class="buttons">
+    <a href="sequence_sunburst.html">Sequence Sunburst</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="scatter_plot.html">Scatter Plot</a>
+    <a href="treemap_entities.html">Treemap</a>
+    <a href="haunted_map.html">Map Visualization</a>
+    <a href="index.html">Home</a>
+  </div>
+
+  <div class="description-block">
+    <h3>Description</h3>
+    <p>This treemap visualizes the most frequently mentioned entities in haunted place data (e.g., names, places, time expressions).</p>
+
+    <h3>Insight</h3>
+    <p>By grouping entity mentions, we can identify recurring themes in haunting reports—certain names or terms may indicate folklore significance or event typologies that warrant deeper investigation.</p>
+  </div>
+
+  <div class="chart-container">
+    <h2>Top Haunted Entities Treemap</h2>
+    <div id="treemap" style="width: 960px; height: 600px;"></div>
+  </div>
 
   <script>
     const width = 960;
     const height = 600;
 
-    
     const treemap = data => {
       const root = d3.hierarchy(data)
         .sum(d => d.value)
@@ -53,18 +132,14 @@
 
       return d3.treemap()
         .size([width, height])
-        .padding(1)
-        (root);
+        .padding(1)(root);
     };
 
-    
     d3.json("treemap_entities_data.json").then(data => {
-
       const root = treemap(data);
-
       const container = d3.select("#treemap");
 
-      const node = container.selectAll(".node")
+      container.selectAll(".node")
         .data(root.leaves())
         .enter().append("div")
         .attr("class", "node")
