@@ -78,14 +78,6 @@
       border-radius: 10px;
     }
 
-    svg {
-      width: 100%;
-      height: 500px;
-      display: block;
-      margin: 0 auto;
-      background-color: transparent;
-    }
-
     .tooltip {
       position: absolute;
       background: rgba(0, 0, 0, 0.75);
@@ -116,7 +108,7 @@
 
   <div class="description-block">
     <h3>Description</h3>
-    <p>This timeline visualization shows how many haunted events were reported per year. Peaks may correspond with historical or cultural moments.</p>
+    <p>This timeline shows how many haunted events are mentioned per year across the dataset. It reflects fluctuations in reported hauntings over time.</p>
 
     <h3>Insight</h3>
     <p>Noticeable spikes in reporting may align with cultural shifts, media influence, or broader interest in paranormal topics at specific points in time.</p>
@@ -125,7 +117,8 @@
   <div class="chart-container">
     <h2>Haunted Events by Year</h2>
     <p>This timeline shows how many haunted events are mentioned per year.</p>
-    <svg></svg>
+
+    <svg width="960" height="500"></svg>
     <div class="tooltip" style="opacity: 0;"></div>
   </div>
 
@@ -157,21 +150,19 @@
       chart.append("g")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x).tickFormat(d3.format("d")))
-        .selectAll("text")
-        .attr("fill", "white");
+        .selectAll("text").attr("fill", "white");
 
       chart.append("g")
         .call(d3.axisLeft(y))
-        .selectAll("text")
-        .attr("fill", "white");
+        .selectAll("text").attr("fill", "white");
 
       chart.selectAll("path.domain, .tick line")
-        .attr("stroke", "white");
+        .attr("stroke", "#ccc");
 
       chart.append("path")
         .datum(data)
         .attr("fill", "none")
-        .attr("stroke", "lime")
+        .attr("stroke", "#00bfff")
         .attr("stroke-width", 2)
         .attr("d", d3.line()
           .x(d => x(d.year))
@@ -185,7 +176,7 @@
         .attr("cx", d => x(d.year))
         .attr("cy", d => y(d.count))
         .attr("r", 4)
-        .attr("fill", "red")
+        .attr("fill", "#ff6347")
         .on("mouseover", (event, d) => {
           tooltip
             .style("opacity", 1)
