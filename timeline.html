@@ -2,197 +2,202 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Haunted Events Timeline</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Courier New', monospace;
-            background-image: url('faceless.png');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            color: white;
-        }
+  <meta charset="UTF-8">
+  <title>Haunted Events Timeline</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-image: url('faceless.png');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: white;
+    }
 
-        header {
-            background-color: #8b0000;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
+    header {
+      background-color: #8b0000;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-        .banner {
-            text-align: center;
-            padding: 30px;
-        }
+    .banner {
+      text-align: center;
+      padding: 30px;
+    }
 
-        .description-block {
-            background-color: #3b2b27;
-            padding: 30px;
-            margin: 20px auto;
-            max-width: 1000px;
-            border-radius: 10px;
-        }
+    .description-block {
+      background-color: #3b2b27;
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 1000px;
+      border-radius: 10px;
+    }
 
-        .description-block h3 {
-            font-size: 20px;
-            color: #ffffff;
-        }
+    .description-block h3 {
+      font-size: 20px;
+      color: #ffffff;
+    }
 
-        .description-block p {
-            font-size: 14px;
-            color: #dddddd;
-            line-height: 1.6;
-        }
+    .description-block p {
+      font-size: 14px;
+      color: #dddddd;
+      line-height: 1.6;
+    }
 
-        .buttons {
-            text-align: center;
-            margin: 30px;
-        }
+    .buttons {
+      text-align: center;
+      margin: 30px;
+    }
 
-        .buttons a {
-            background-color: white;
-            color: black;
-            padding: 10px 20px;
-            margin: 10px;
-            text-decoration: none;
-            border-radius: 8px;
-            display: inline-block;
-            font-weight: bold;
-        }
+    .buttons a {
+      background-color: white;
+      color: black;
+      padding: 10px 20px;
+      margin: 10px;
+      text-decoration: none;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: bold;
+    }
 
-        .buttons a:hover {
-            background-color: #ddd;
-        }
+    .buttons a:hover {
+      background-color: #ddd;
+    }
 
-        .chart-container {
-            background-color: #111;
-            color: white;
-            max-width: 1000px;
-            margin: 0 auto 40px auto;
-            padding: 20px;
-            border-radius: 10px;
-        }
+    .chart-container {
+      background-color: #111;
+      color: white;
+      max-width: 1000px;
+      margin: 0 auto 40px auto;
+      padding: 20px;
+      border-radius: 10px;
+    }
 
-        svg {
-            width: 100%;
-            height: 500px;
-            display: block;
-            margin: 0 auto;
-            background-color: transparent;
-        }
+    svg {
+      width: 100%;
+      height: 500px;
+      display: block;
+      margin: 0 auto;
+      background-color: transparent;
+    }
 
-        .tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.75);
-            color: white;
-            padding: 6px 10px;
-            border-radius: 4px;
-            pointer-events: none;
-            font-size: 12px;
-        }
-    </style>
+    .tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.75);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 4px;
+      pointer-events: none;
+      font-size: 12px;
+    }
+  </style>
 </head>
 
 <body>
-    <header>Haunted Places Data Exploration – Spring 2025</header>
+  <header>Haunted Places Data Exploration – Spring 2025</header>
 
-    <div class="banner">
-        <h1>Explore Visualizations</h1>
-    </div>
+  <div class="banner">
+    <h1>Explore Visualizations</h1>
+  </div>
 
-    <div class="buttons">
-        <a href="sequence_sunburst.html">Sequence Sunburst</a>
-        <a href="timeline.html">Timeline</a>
-        <a href="scatter_plot.html">Scatter Plot</a>
-        <a href="treemap_entities.html">Treemap</a>
-        <a href="haunted_map.html">Map Visualization</a>
-        <a href="index.html">Home</a>
-    </div>
+  <div class="buttons">
+    <a href="sequence_sunburst.html">Sequence Sunburst</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="scatter_plot.html">Scatter Plot</a>
+    <a href="treemap_entities.html">Treemap</a>
+    <a href="haunted_map.html">Map Visualization</a>
+    <a href="index.html">Home</a>
+  </div>
 
-    <div class="description-block">
-        <h3>Description</h3>
-        <p>This timeline visualization shows the frequency of haunted event reports per year, helping to highlight peaks or historical trends in paranormal activity.</p>
+  <div class="description-block">
+    <h3>Description</h3>
+    <p>This timeline visualization shows how many haunted events were reported per year. Peaks may correspond with historical or cultural moments.</p>
 
-        <h3>Insight</h3>
-        <p>Noticeable spikes in reporting may align with cultural shifts, media influence, or broader interest in paranormal topics at specific points in time.</p>
-    </div>
+    <h3>Insight</h3>
+    <p>Noticeable spikes in reporting may align with cultural shifts, media influence, or broader interest in paranormal topics at specific points in time.</p>
+  </div>
 
-    <div class="chart-container">
-        <h2>Haunted Events by Year</h2>
-        <p>This timeline shows how many haunted events are mentioned per year.</p>
-        <svg></svg>
-        <div class="tooltip" style="opacity: 0;"></div>
-    </div>
+  <div class="chart-container">
+    <h2>Haunted Events by Year</h2>
+    <p>This timeline shows how many haunted events are mentioned per year.</p>
+    <svg></svg>
+    <div class="tooltip" style="opacity: 0;"></div>
+  </div>
 
-    <script>
-        const svg = d3.select("svg");
-        const tooltip = d3.select(".tooltip");
+  <script>
+    const svg = d3.select("svg");
+    const tooltip = d3.select(".tooltip");
 
-        const margin = { top: 30, right: 30, bottom: 50, left: 60 };
-        const width = +svg.attr("width") - margin.left - margin.right;
-        const height = +svg.attr("height") - margin.top - margin.bottom;
+    const margin = { top: 30, right: 30, bottom: 50, left: 60 };
+    const width = +svg.attr("width") - margin.left - margin.right;
+    const height = +svg.attr("height") - margin.top - margin.bottom;
 
-        const chart = svg.append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+    const chart = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        d3.json("timeline_data.json").then(data => {
-            data.forEach(d => {
-                d.year = +d.year;
-                d.count = +d.count;
-            });
+    d3.json("timeline_data.json").then(data => {
+      data.forEach(d => {
+        d.year = +d.year;
+        d.count = +d.count;
+      });
 
-            const x = d3.scaleLinear()
-                .domain(d3.extent(data, d => d.year))
-                .range([0, width]);
+      const x = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.year))
+        .range([0, width]);
 
-            const y = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d.count)]).nice()
-                .range([height, 0]);
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.count)]).nice()
+        .range([height, 0]);
 
-            chart.append("g")
-                .attr("transform", `translate(0,${height})`)
-                .call(d3.axisBottom(x).tickFormat(d3.format("d"))).selectAll("text")
-                .attr("fill", "white");
+      chart.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x).tickFormat(d3.format("d")))
+        .selectAll("text")
+        .attr("fill", "white");
 
-            chart.append("g")
-                .call(d3.axisLeft(y)).selectAll("text")
-                .attr("fill", "white");
+      chart.append("g")
+        .call(d3.axisLeft(y))
+        .selectAll("text")
+        .attr("fill", "white");
 
-            chart.append("path")
-                .datum(data)
-                .attr("fill", "none")
-                .attr("stroke", "#00ccff")
-                .attr("stroke-width", 2)
-                .attr("d", d3.line()
-                    .x(d => x(d.year))
-                    .y(d => y(d.count))
-                );
+      chart.selectAll("path.domain, .tick line")
+        .attr("stroke", "white");
 
-            chart.selectAll("circle")
-                .data(data)
-                .enter()
-                .append("circle")
-                .attr("cx", d => x(d.year))
-                .attr("cy", d => y(d.count))
-                .attr("r", 4)
-                .attr("fill", "orange")
-                .on("mouseover", (event, d) => {
-                    tooltip
-                        .style("opacity", 1)
-                        .html(`Year: <strong>${d.year}</strong><br>Mentions: <strong>${d.count}</strong>`)
-                        .style("left", `${event.pageX + 10}px`)
-                        .style("top", `${event.pageY - 28}px`);
-                })
-                .on("mouseout", () => {
-                    tooltip.style("opacity", 0);
-                });
+      chart.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "lime")
+        .attr("stroke-width", 2)
+        .attr("d", d3.line()
+          .x(d => x(d.year))
+          .y(d => y(d.count))
+        );
+
+      chart.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => x(d.year))
+        .attr("cy", d => y(d.count))
+        .attr("r", 4)
+        .attr("fill", "red")
+        .on("mouseover", (event, d) => {
+          tooltip
+            .style("opacity", 1)
+            .html(`Year: <strong>${d.year}</strong><br>Mentions: <strong>${d.count}</strong>`)
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mouseout", () => {
+          tooltip.style("opacity", 0);
         });
-    </script>
+    });
+  </script>
 </body>
 
 </html>
