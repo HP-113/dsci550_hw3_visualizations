@@ -8,22 +8,74 @@
   <script src="https://unpkg.com/topojson@3"></script>
   <style>
     body {
-      font-family: sans-serif;
       margin: 0;
       padding: 0;
+      font-family: 'Courier New', monospace;
       background-image: url('faceless.png');
       background-size: cover;
-      background-repeat: no-repeat;
       background-attachment: fixed;
       background-position: center;
       color: white;
     }
 
-    .overlay {
-      background-color: rgba(0, 0, 0, 0.6);
-      margin: 40px auto;
+    header {
+      background-color: #8b0000;
       padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .description-block {
+      background-color: #3b2b27;
+      padding: 30px;
+      margin: 20px auto;
       max-width: 1000px;
+      border-radius: 10px;
+    }
+
+    .description-block h3 {
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    .description-block p {
+      font-size: 14px;
+      color: #dddddd;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      text-align: center;
+      margin: 30px;
+    }
+
+    .buttons a {
+      background-color: white;
+      color: black;
+      padding: 10px 20px;
+      margin: 10px;
+      text-decoration: none;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .buttons a:hover {
+      background-color: #ddd;
+    }
+
+    .map-container {
+      background-color: white;
+      color: black;
+      max-width: 1000px;
+      margin: 0 auto 40px auto;
+      padding: 20px;
       border-radius: 10px;
     }
 
@@ -53,7 +105,29 @@
 </head>
 
 <body>
-  <div class="overlay">
+  <header>Haunted Places Data Exploration – Spring 2025</header>
+
+  <div class="banner">
+    <h1>Explore Visualizations</h1>
+  </div>
+
+  <div class="buttons">
+    <a href="sequence_sunburst.html">Sequence Sunburst</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="scatter_plot.html">Scatter Plot</a>
+    <a href="treemap_entities.html">Treemap</a>
+    <a href="index.html">Home</a>
+  </div>
+
+  <div class="description-block">
+    <h3>Description</h3>
+    <p>This map visualizes haunted location reports across the United States. Blue circles indicate cities with reported haunted places, and larger circles represent more frequent reports.</p>
+
+    <h3>Insight</h3>
+    <p>The distribution reveals heavy clustering of haunted place reports along the East Coast and parts of California and Texas. These clusters may reflect historical settlement patterns, cultural folklore, or population density and reporting accessibility.</p>
+  </div>
+
+  <div class="map-container">
     <h2>Haunted Places - City Bubble Map</h2>
     <p>Each circle represents a city with haunted places. You can zoom or drag the map.</p>
     <svg width="960" height="600"></svg>
@@ -104,7 +178,6 @@
         .attr("stroke", "#999")
         .attr("d", path);
 
-      // Add state abbreviation labels
       g.append("g")
         .selectAll("text")
         .data(states)
@@ -116,7 +189,6 @@
         })
         .text(d => stateAbbr[d.id]);
 
-      // Draw blue city bubbles
       g.append("g")
         .selectAll("circle")
         .data(cities)
