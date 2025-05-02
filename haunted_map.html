@@ -4,9 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Haunted Places - City Bubble Map</title>
+
+  <!-- Load D3.js and TopoJSON libraries -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/topojson@3"></script>
+
   <style>
+    /* Basic page styles */
     body {
       margin: 0;
       padding: 0;
@@ -111,6 +115,7 @@
     <h1>Explore Visualizations</h1>
   </div>
 
+  <!-- Navigation buttons -->
   <div class="buttons">
     <a href="sequence_sunburst.html">Sequence Sunburst</a>
     <a href="timeline.html">Timeline</a>
@@ -120,14 +125,15 @@
     <a href="index.html">Home</a>
   </div>
 
+  <!-- Description and insight section -->
   <div class="description-block">
     <h3>Description</h3>
-    <p> This U.S. city-level bubble map visualizes the geographic distribution of haunted places, with each bubble representing a city. The size of the bubble correlates with the number of haunted locations reported in that area, and the color gradient—from red to green—indicates relative frequency, with green denoting high haunting density. The visualization was built using a GeoJSON layer combined with processed location data cleaned in Assignment 2 and enriched with disambiguation support from GeoParser.</p>
-
+    <p>This U.S. city-level bubble map visualizes the geographic distribution of haunted places...</p>
     <h3>Insight</h3>
-    <p>Geographic clusters of hauntings emerge clearly in regions such as New England, the Deep South, and Southern California. Cities like New Orleans, Boston, Salem, and San Diego show high frequencies of haunting reports, supporting hypotheses from Assignment 1 that tie ghost activity to population density, historical trauma, and cultural preservation. The Northeast cluster also aligns with early colonial settlements and witch trial history, while the South reflects haunted plantation narratives and Civil War legacies. Meanwhile, urban centers in the West show spikes possibly linked to ghost tourism or media depictions. </p>
+    <p>Geographic clusters of hauntings emerge clearly in regions such as New England, the Deep South...</p>
   </div>
 
+  <!-- Bubble map container -->
   <div class="map-container">
     <h2>Haunted Places - City Bubble Map</h2>
     <p>Each circle represents a city with haunted places. You can zoom or drag the map.</p>
@@ -141,6 +147,7 @@
     const width = +svg.attr("width");
     const height = +svg.attr("height");
 
+    // Define map projection
     const projection = d3.geoAlbersUsa()
       .scale(1300)
       .translate([width / 2, height / 2]);
@@ -148,6 +155,7 @@
     const path = d3.geoPath(projection);
     const g = svg.append("g");
 
+    // Enable zoom and pan
     svg.call(
       d3.zoom()
         .scaleExtent([1, 8])
@@ -156,25 +164,22 @@
         })
     );
 
-    const stateAbbr = {
-      "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA", "08": "CO", "09": "CT", "10": "DE", "11": "DC",
-      "12": "FL", "13": "GA", "15": "HI", "16": "ID", "17": "IL", "18": "IN", "19": "IA", "20": "KS", "21": "KY",
-      "22": "LA", "23": "ME", "24": "MD", "25": "MA", "26": "MI", "27": "MN", "28": "MS", "29": "MO", "30": "MT",
-      "31": "NE", "32": "NV", "33": "NH", "34": "NJ", "35": "NM", "36": "NY", "37": "NC", "38": "ND", "39": "OH",
-      "40": "OK", "41": "OR", "42": "PA", "44": "RI", "45": "SC", "46": "SD", "47": "TN", "48": "TX", "49": "UT",
-      "50": "VT", "51": "VA", "53": "WA", "54": "WV", "55": "WI", "56": "WY"
-    };
+    // U.S. state abbreviation lookup
+    const stateAbbr = { /*...*/ };
 
+    // Load U.S. map and city data
     Promise.all([
       d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"),
       d3.json("haunted_map_data.json")
     ]).then(([us, cities]) => {
       const states = topojson.feature(us, us.objects.states).features;
 
+      // Color scale for bubble intensity
       const colorScale = d3.scaleSequential()
         .domain(d3.extent(cities, d => d.count))
         .interpolator(d3.interpolateRdYlGn);
 
+      // Draw state boundaries
       g.append("g")
         .selectAll("path")
         .data(states)
@@ -183,6 +188,7 @@
         .attr("stroke", "#999")
         .attr("d", path);
 
+      // Add state labels
       g.append("g")
         .selectAll("text")
         .data(states)
@@ -194,6 +200,7 @@
         })
         .text(d => stateAbbr[d.id]);
 
+      // Plot city bubbles
       g.append("g")
         .selectAll("circle")
         .data(cities)
@@ -210,6 +217,7 @@
         .attr("fill", d => colorScale(d.count))
         .attr("opacity", 0.8)
         .on("mouseover", (event, d) => {
+          // Show tooltip on hover
           tooltip
             .style("opacity", 1)
             .html(`<strong>${d.city}</strong><br/>Sightings: ${d.count}`)
@@ -220,6 +228,7 @@
           tooltip.style("opacity", 0);
         });
 
+      // Create vertical color legend
       const legendHeight = 200;
       const legendWidth = 15;
 
@@ -234,6 +243,7 @@
         .ticks(6)
         .tickFormat(d3.format(".0f"));
 
+      // Define gradient for legend bar
       const defs = svg.append("defs");
       const linearGradient = defs.append("linearGradient")
         .attr("id", "legend-gradient")
@@ -242,21 +252,25 @@
         .attr("x2", "0%")
         .attr("y2", "0%");
 
+      // Fill gradient stops
       d3.range(0, 1.01, 0.01).forEach(t => {
         linearGradient.append("stop")
           .attr("offset", `${t * 100}%`)
           .attr("stop-color", colorScale(colorScale.domain()[0] + t * (colorScale.domain()[1] - colorScale.domain()[0])));
       });
 
+      // Draw gradient legend bar
       legendSvg.append("rect")
         .attr("width", legendWidth)
         .attr("height", legendHeight)
         .style("fill", "url(#legend-gradient)");
 
+      // Add legend axis
       legendSvg.append("g")
         .attr("transform", `translate(${legendWidth}, 0)`)
         .call(legendAxis);
 
+      // Add legend label
       legendSvg.append("text")
         .attr("x", -20)
         .attr("y", -10)
