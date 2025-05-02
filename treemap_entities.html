@@ -4,8 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Haunted Places - Entity Treemap</title>
+
+  <!-- Load D3.js library -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+
   <style>
+    /* Base styling for layout and background */
     body {
       margin: 0;
       padding: 0;
@@ -17,6 +21,7 @@
       color: white;
     }
 
+    /* Header bar */
     header {
       background-color: #8b0000;
       padding: 20px;
@@ -30,6 +35,7 @@
       padding: 30px;
     }
 
+    /* Navigation button styles */
     .buttons {
       text-align: center;
       margin: 30px;
@@ -50,6 +56,7 @@
       background-color: #ddd;
     }
 
+    /* Description + insight section */
     .description-block {
       background-color: #3b2b27;
       padding: 30px;
@@ -69,6 +76,7 @@
       line-height: 1.6;
     }
 
+    /* Treemap container */
     .chart-container {
       background-color: #111;
       color: white;
@@ -79,6 +87,7 @@
       position: relative;
     }
 
+    /* Individual treemap node (as absolutely positioned div) */
     .node {
       position: absolute;
       box-sizing: border-box;
@@ -93,12 +102,15 @@
 </head>
 
 <body>
+  <!-- Page header -->
   <header>Haunted Places Data Exploration – Spring 2025</header>
 
+  <!-- Title banner -->
   <div class="banner">
     <h1>Explore Visualizations</h1>
   </div>
 
+  <!-- Navigation bar -->
   <div class="buttons">
     <a href="sequence_sunburst.html">Sequence Sunburst</a>
     <a href="timeline.html">Timeline</a>
@@ -108,14 +120,15 @@
     <a href="index.html">Home</a>
   </div>
 
+  <!-- Description and insight -->
   <div class="description-block">
     <h3>Description</h3>
-    <p>The treemap visualizes the most frequently occurring keywords and phrases from the haunted places dataset. It uses tokenized and cleaned textual data (lowercased, stopword-removed) from narrative descriptions to display word frequency as proportional rectangles. Each box's size corresponds to how often a phrase appeared across all entries, offering an at-a-glance analysis of the most dominant themes in ghost stories.</p>
-
+    <p>The treemap visualizes the most frequently occurring keywords and phrases from the haunted places dataset...</p>
     <h3>Insight</h3>
-    <p>The overwhelming presence of the word “night” and closely associated phrases such as “late at night” “midnight”, and “the night”  reinforces the clear temporal pattern in haunting narratives. This visual confirms earlier NLP-based observations from Assignment 1—that over 60% of supernatural sightings were reported during nighttime hours (9PM–3AM). In addition, terms like “Civil War,” “Native American,” “WWII,” “Indians,” and “Union” reveal deep historical embedding within ghost stories. These keyword clusters suggest that hauntings are not randomly imagined but often tied to periods of trauma, displacement, and unresolved cultural memory. This aligns well with folkloric studies on ghost narratives being used to process generational grief or guilt.</p>
+    <p>The overwhelming presence of the word “night” and closely associated phrases such as “late at night” and “midnight”...</p>
   </div>
 
+  <!-- Treemap display container -->
   <div class="chart-container">
     <h2>Top Haunted Entities Treemap</h2>
     <div id="treemap" style="width: 960px; height: 600px;"></div>
@@ -125,20 +138,23 @@
     const width = 960;
     const height = 600;
 
+    // Generate treemap layout from hierarchical data
     const treemap = data => {
       const root = d3.hierarchy(data)
-        .sum(d => d.value)
+        .sum(d => d.value)           
         .sort((a, b) => b.value - a.value);
 
       return d3.treemap()
-        .size([width, height])
-        .padding(1)(root);
+        .size([width, height])      
+        .padding(1)(root);        
     };
 
+    // Load and render treemap data
     d3.json("treemap_entities_data.json").then(data => {
-      const root = treemap(data);
-      const container = d3.select("#treemap");
+      const root = treemap(data);     
+      const container = d3.select("#treemap"); 
 
+      // Create absolutely-positioned divs for each leaf node
       container.selectAll(".node")
         .data(root.leaves())
         .enter().append("div")
@@ -147,10 +163,8 @@
         .style("top", d => `${d.y0}px`)
         .style("width", d => `${d.x1 - d.x0}px`)
         .style("height", d => `${d.y1 - d.y0}px`)
-        .style("background", d => d3.interpolateRdYlGn(d.value / root.value))
-        .text(d => `${d.data.name} (${d.data.value})`);
-    });
+        .style("background", d => d3.interpolateRdYlGn(d.value / root.value)) 
+        .text(d => `${d.data.name} (${d.data.value})`); 
   </script>
 </body>
-
 </html>
