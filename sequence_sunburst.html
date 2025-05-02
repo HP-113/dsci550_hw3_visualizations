@@ -4,8 +4,12 @@
 <head>
   <meta charset="utf-8">
   <title>Sequence Sunburst - Time → Event → Apparition</title>
+
+  <!-- Load D3.js library -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+
   <style>
+    /* Basic styling and dark-themed layout */
     body {
       margin: 0;
       padding: 0;
@@ -50,6 +54,7 @@
       background-color: #ddd;
     }
 
+    /* Description and insight section */
     .description-block {
       background-color: #3b2b27;
       padding: 30px;
@@ -69,6 +74,7 @@
       line-height: 1.6;
     }
 
+    /* Breadcrumb trail placeholder */
     #breadcrumb {
       font-size: 14px;
       margin-bottom: 10px;
@@ -77,6 +83,7 @@
       text-align: center;
     }
 
+    /* SVG and label styling */
     svg {
       display: block;
       margin: 0 auto;
@@ -114,12 +121,15 @@
 </head>
 
 <body>
+  <!-- Page header -->
   <header>Haunted Places Data Exploration – Spring 2025</header>
 
+  <!-- Page title -->
   <div class="banner">
     <h1>Explore Visualizations</h1>
   </div>
 
+  <!-- Navigation links -->
   <div class="buttons">
     <a href="sequence_sunburst.html">Sequence Sunburst</a>
     <a href="timeline.html">Timeline</a>
@@ -129,13 +139,15 @@
     <a href="index.html">Home</a>
   </div>
 
+  <!-- Description and analysis -->
   <div class="description-block">
     <h3>Description</h3>
-    <p>This sunburst chart visualizes the hierarchical structure of haunted reports by time of day, crime event type, and apparition type. The innermost ring represents the time of day when the event occurred. The middle layer displays the associated type of crime or incident, and the outer ring breaks down the types of apparitions involved. Hovering over any segment reveals its percentage share and total number of mentions.</p>
+    <p>This sunburst chart visualizes the hierarchical structure of haunted reports by time of day, crime event type, and apparition type...</p>
     <h3>Insight</h3>
-    <p>One key insight from the sunburst chart is that a significant portion of haunted reports cluster around certain times of day—particularly the evening—often associated with specific types of crimes and apparition phenomena. The structure also reveals that some crime categories lead to a wider variety of apparition types than others, suggesting a potential link between perceived paranormal activity and the nature of the incident. Additionally, the prominence of "unknown" categories in some branches highlights data uncertainty or incomplete records.</p>
+    <p>One key insight from the sunburst chart is that a significant portion of haunted reports cluster around certain times of day...</p>
   </div>
 
+  <!-- Breadcrumb and SVG placeholder -->
   <div id="breadcrumb">Hover over a segment</div>
   <svg></svg>
 
@@ -143,18 +155,21 @@
     const width = 800;
     const radius = width / 2;
 
+    // Create main SVG group and center it
     const svg = d3.select("svg")
       .attr("viewBox", [0, 0, width, width]);
 
     const g = svg.append("g")
       .attr("transform", `translate(${radius},${radius})`);
 
+    // Define arc generator for each node
     const arc = d3.arc()
       .startAngle(d => d.x0)
       .endAngle(d => d.x1)
       .innerRadius(d => d.y0)
       .outerRadius(d => d.y1);
 
+    // Convert flat sequence data to hierarchical JSON
     function buildHierarchy(csv) {
       const root = { name: "root", children: [] };
       for (const row of csv) {
@@ -168,14 +183,16 @@
           }
           current = child;
         }
-        current.value = +row.size;
+        current.value = +row.size; // Assign size at leaf node
       }
       return root;
     }
 
+    // Render breadcrumb trail based on hover path
     function breadcrumb(sequenceArray) {
-      const b = { w: 100, h: 30, s: 3 };
+      const b = { w: 100, h: 30, s: 3 }; // width, height, spacing
       const trail = svg.selectAll(".trail").data([null]).join("g").attr("class", "trail");
+
       const groups = trail.selectAll("g")
         .data(sequenceArray)
         .join(enter => {
@@ -201,14 +218,17 @@
       trail.attr("transform", "translate(0,0)");
     }
 
+    // Load sunburst data
     d3.json("sequence_sunburst_data.json").then(csv => {
+      // Build hierarchy and layout
       const root = d3.partition()
         .size([2 * Math.PI, radius])
         (d3.hierarchy(buildHierarchy(csv)).sum(d => d.value || 0));
 
       const total = root.value;
-      const nodes = root.descendants().filter(d => d.depth);
+      const nodes = root.descendants().filter(d => d.depth); // Skip root
 
+      // Draw sunburst segments
       const path = g.selectAll("path")
         .data(nodes)
         .join("path")
@@ -216,29 +236,35 @@
         .attr("fill", d => d3.interpolateRainbow(d.x0 / (2 * Math.PI)))
         .style("opacity", 1)
         .on("mouseover", function (event, d) {
+          // On hover: show trail, highlight path, show percent & count
           const sequence = d.ancestors().reverse().slice(1).map(d => d.data.name);
           const percent = (d.value / total * 100).toFixed(2) + "%";
           const count = d.value;
           breadcrumb(sequence);
+
           g.selectAll("path").style("opacity", 0.3);
           g.selectAll("path")
             .filter(node => sequence.includes(node.data.name))
             .style("opacity", 1);
+
           label.text(percent);
           sublabel.text(`${count} mentions`);
         })
         .on("mouseout", () => {
+          // Reset on mouseout
           g.selectAll("path").style("opacity", 1);
           d3.selectAll(".trail").remove();
           label.text("Hover a segment");
           sublabel.text("");
         });
 
+      // Center label: percentage
       const label = g.append("text")
         .attr("class", "center-label")
         .attr("y", -10)
         .text("Hover a segment");
 
+      // Center sublabel: raw count
       const sublabel = g.append("text")
         .attr("class", "center-label sub-label")
         .attr("y", 15)
