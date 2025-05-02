@@ -4,19 +4,24 @@
 <head>
   <meta charset="UTF-8" />
   <title>Scatter Plot: Precipitation vs Haunting</title>
+
+  <!-- Load D3.js library -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+
   <style>
+    /* Basic page styling */
     body {
       margin: 0;
       padding: 0;
       font-family: 'Courier New', monospace;
-      background-image: url('faceless.png');
+      background-image: url('faceless.png'); /* Background image */
       background-size: cover;
       background-attachment: fixed;
       background-position: center;
       color: white;
     }
 
+    /* Page header */
     header {
       background-color: #8b0000;
       padding: 20px;
@@ -25,11 +30,13 @@
       font-weight: bold;
     }
 
+    /* Top banner */
     .banner {
       text-align: center;
       padding: 30px;
     }
 
+    /* Description block styling */
     .description-block {
       background-color: #3b2b27;
       padding: 30px;
@@ -49,6 +56,7 @@
       line-height: 1.6;
     }
 
+    /* Navigation buttons */
     .buttons {
       text-align: center;
       margin: 30px;
@@ -69,6 +77,7 @@
       background-color: #ddd;
     }
 
+    /* Chart container */
     .chart-container {
       background-color: #111;
       color: white;
@@ -78,6 +87,7 @@
       border-radius: 10px;
     }
 
+    /* SVG for D3 chart */
     svg {
       width: 100%;
       height: 600px;
@@ -86,6 +96,7 @@
       background-color: transparent;
     }
 
+    /* Tooltip styling */
     .tooltip {
       position: absolute;
       background: rgba(0, 0, 0, 0.75);
@@ -99,12 +110,15 @@
 </head>
 
 <body>
+  <!-- Main page header -->
   <header>Haunted Places Data Exploration – Spring 2025</header>
 
+  <!-- Title banner -->
   <div class="banner">
     <h1>Explore Visualizations</h1>
   </div>
 
+  <!-- Navigation menu -->
   <div class="buttons">
     <a href="sequence_sunburst.html">Sequence Sunburst</a>
     <a href="timeline.html">Timeline</a>
@@ -114,14 +128,15 @@
     <a href="index.html">Home</a>
   </div>
 
+  <!-- Description and Insight block -->
   <div class="description-block">
     <h3>Description</h3>
-    <p>This scatter plot compares the number of hauntings reported in a city against its average annual precipitation, measured in inches. The x-axis represents precipitation levels, while the y-axis indicates how many haunted places were documented for that geographic location. Each dot corresponds to a specific U.S. city. This chart explores whether environmental conditions—specifically rainfall—have any correlation with the frequency of supernatural reports.</p>
-
+    <p>This scatter plot compares the number of hauntings reported in a city against its average annual precipitation...</p>
     <h3>Insight</h3>
-    <p>Contrary to traditional stereotypes linking rainy, gloomy weather with ghost sightings, the plot reveals no strong linear correlation between precipitation and haunting count. Instead, there’s a dense cluster of hauntings in locations with moderate rainfall (15–35 inches annually), and even dry or arid places (e.g., parts of the Southwest) show substantial activity. This suggests that atmospheric conditions may not be as influential as cultural, historical, or psychological factors. In fact, high-haunting cities with relatively low rainfall—like Las Vegas or Tucson—challenge the narrative that “darker weather = more ghosts,” hinting that narrative density and local folklore may be more critical variables than environment.</p>
+    <p>Contrary to traditional stereotypes linking rainy, gloomy weather with ghost sightings...</p>
   </div>
 
+  <!-- Scatter plot container -->
   <div class="chart-container">
     <h2>Scatter Plot: Annual Precipitation vs Number of Hauntings</h2>
     <svg></svg>
@@ -129,22 +144,26 @@
   </div>
 
   <script>
+    // Set up chart dimensions and margins
     const margin = { top: 40, right: 40, bottom: 50, left: 60 },
       width = 900 - margin.left - margin.right,
       height = 600 - margin.top - margin.bottom;
 
+    // Append SVG group for plotting
     const svg = d3.select("svg")
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     const tooltip = d3.select(".tooltip");
 
+    // Load and process scatter plot data
     d3.json("scatter_plot_data.json").then(data => {
       data.forEach(d => {
         d.precipitation = +d.precipitation;
         d.haunting = +d.haunting;
       });
 
+      // Define scales
       const x = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.precipitation) * 1.05])
         .range([0, width]);
@@ -153,13 +172,16 @@
         .domain([0, d3.max(data, d => d.haunting) * 1.05])
         .range([height, 0]);
 
+      // Add x-axis
       svg.append("g")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x).tickSize(-height).tickPadding(10));
 
+      // Add y-axis
       svg.append("g")
         .call(d3.axisLeft(y).tickSize(-width).tickPadding(10));
 
+      // Add x-axis label
       svg.append("text")
         .attr("x", width / 2)
         .attr("y", height + 40)
@@ -167,6 +189,7 @@
         .attr("fill", "white")
         .text("Average Annual Precipitation (inches)");
 
+      // Add y-axis label
       svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
@@ -175,6 +198,7 @@
         .attr("fill", "white")
         .text("Haunted Places Count");
 
+      // Draw data points (circles)
       svg.selectAll("circle")
         .data(data)
         .join("circle")
@@ -183,6 +207,7 @@
         .attr("r", 5)
         .attr("fill", "#d62728")
         .on("mouseover", (event, d) => {
+          // Show tooltip on hover
           tooltip.style("opacity", 1)
             .html(`<strong>${d.state}</strong><br>Precip: ${d.precipitation}<br>Haunted: ${d.haunting}`)
             .style("left", `${event.pageX + 10}px`)
@@ -190,20 +215,23 @@
         })
         .on("mouseout", () => tooltip.style("opacity", 0));
 
+      // Compute linear regression for trend line
       const n = data.length;
       const sumX = d3.sum(data, d => d.precipitation);
       const sumY = d3.sum(data, d => d.haunting);
       const sumXY = d3.sum(data, d => d.precipitation * d.haunting);
       const sumX2 = d3.sum(data, d => d.precipitation ** 2);
 
-      const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX ** 2);
-      const b = (sumY - a * sumX) / n;
+      const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX ** 2); // slope
+      const b = (sumY - a * sumX) / n; // intercept
 
+      // Define endpoints of regression line
       const xMin = d3.min(data, d => d.precipitation);
       const xMax = d3.max(data, d => d.precipitation);
       const yMin = a * xMin + b;
       const yMax = a * xMax + b;
 
+      // Draw regression line
       svg.append("line")
         .attr("x1", x(xMin))
         .attr("y1", y(yMin))
