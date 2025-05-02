@@ -4,8 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Haunted Events Timeline</title>
+
+  <!-- Load D3.js for visualization -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+
   <style>
+    /* Page layout and background styling */
     body {
       margin: 0;
       padding: 0;
@@ -30,6 +34,7 @@
       padding: 30px;
     }
 
+    /* Description and insight block */
     .description-block {
       background-color: #3b2b27;
       padding: 30px;
@@ -49,6 +54,7 @@
       line-height: 1.6;
     }
 
+    /* Navigation buttons */
     .buttons {
       text-align: center;
       margin: 30px;
@@ -69,6 +75,7 @@
       background-color: #ddd;
     }
 
+    /* Chart container */
     .chart-container {
       background-color: #111;
       color: white;
@@ -78,6 +85,7 @@
       border-radius: 10px;
     }
 
+    /* Tooltip style */
     .tooltip {
       position: absolute;
       background: rgba(0, 0, 0, 0.75);
@@ -91,12 +99,15 @@
 </head>
 
 <body>
+  <!-- Page header -->
   <header>Haunted Places Data Exploration – Spring 2025</header>
 
+  <!-- Top banner -->
   <div class="banner">
     <h1>Explore Visualizations</h1>
   </div>
 
+  <!-- Navigation links -->
   <div class="buttons">
     <a href="sequence_sunburst.html">Sequence Sunburst</a>
     <a href="timeline.html">Timeline</a>
@@ -106,39 +117,45 @@
     <a href="index.html">Home</a>
   </div>
 
+  <!-- Description and analysis -->
   <div class="description-block">
     <h3>Description</h3>
-    <p> This timeline illustrates the number of haunted events mentioned by year in the dataset, ranging from the early 1800s to the present. The data for this chart was extracted using regular expressions and temporal entity recognition, primarily from date mentions within narrative descriptions. Each data point represents the frequency with which a specific year was referenced across haunted place entries, providing a longitudinal view of haunting-related activity in cultural memory.</p>
-
+    <p>This timeline illustrates the number of haunted events mentioned by year in the dataset...</p>
     <h3>Insight</h3>
-    <p>The line chart shows irregular spikes, most notably at regular 10-year intervals. This pattern likely results from uncertain or approximate event dates in the dataset being rounded to the nearest decade year.</p>
+    <p>The line chart shows irregular spikes, most notably at regular 10-year intervals...</p>
   </div>
 
+  <!-- Chart container -->
   <div class="chart-container">
     <h2>Haunted Events by Year</h2>
     <p>Timeline shows how many haunted events are mentioned per year.</p>
-
     <svg width="960" height="500"></svg>
     <div class="tooltip" style="opacity: 0;"></div>
   </div>
 
   <script>
+    // Select SVG and tooltip container
     const svg = d3.select("svg");
     const tooltip = d3.select(".tooltip");
 
+    // Set up chart dimensions and margins
     const margin = { top: 30, right: 30, bottom: 50, left: 60 };
     const width = +svg.attr("width") - margin.left - margin.right;
     const height = +svg.attr("height") - margin.top - margin.bottom;
 
+    // Append chart group inside SVG with margin offset
     const chart = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
+    // Load timeline data from JSON
     d3.json("timeline_data.json").then(data => {
+      // Parse numeric values
       data.forEach(d => {
         d.year = +d.year;
         d.count = +d.count;
       });
 
+      // X and Y scale setup
       const x = d3.scaleLinear()
         .domain(d3.extent(data, d => d.year))
         .range([0, width]);
@@ -147,18 +164,22 @@
         .domain([0, d3.max(data, d => d.count)]).nice()
         .range([height, 0]);
 
+      // Add X axis
       chart.append("g")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x).tickFormat(d3.format("d")))
         .selectAll("text").attr("fill", "white");
 
+      // Add Y axis
       chart.append("g")
         .call(d3.axisLeft(y))
         .selectAll("text").attr("fill", "white");
 
+      // Style grid lines
       chart.selectAll("path.domain, .tick line")
         .attr("stroke", "#ccc");
 
+      // Draw the timeline line
       chart.append("path")
         .datum(data)
         .attr("fill", "none")
@@ -169,6 +190,7 @@
           .y(d => y(d.count))
         );
 
+      // Add data points as circles
       chart.selectAll("circle")
         .data(data)
         .enter()
@@ -178,6 +200,7 @@
         .attr("r", 4)
         .attr("fill", "#ff6347")
         .on("mouseover", (event, d) => {
+          // Show tooltip on hover
           tooltip
             .style("opacity", 1)
             .html(`Year: <strong>${d.year}</strong><br>Mentions: <strong>${d.count}</strong>`)
@@ -185,10 +208,10 @@
             .style("top", `${event.pageY - 28}px`);
         })
         .on("mouseout", () => {
+          // Hide tooltip on mouse out
           tooltip.style("opacity", 0);
         });
     });
   </script>
 </body>
-
 </html>
